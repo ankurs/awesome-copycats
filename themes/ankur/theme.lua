@@ -110,27 +110,6 @@ theme.cal = lain.widget.cal({
     }
 })
 
--- Mail IMAP check
-local mailicon = wibox.widget.imagebox(theme.widget_mail)
---[[ commented because it needs to be set before use
-mailicon:buttons(my_table.join(awful.button({ }, 1, function () awful.spawn(mail) end)))
-theme.mail = lain.widget.imap({
-    timeout  = 180,
-    server   = "server",
-    mail     = "mail",
-    password = "keyring get mail",
-    settings = function()
-        if mailcount > 0 then
-            widget:set_markup(markup.font(theme.font, " " .. mailcount .. " "))
-            mailicon:set_image(theme.widget_mail_on)
-        else
-            widget:set_text("")
-            mailicon:set_image(theme.widget_mail)
-        end
-    end
-})
---]]
-
 -- MPD
 local musicplr = awful.util.terminal .. " -title Music -g 130x34-320+16 -e ncmpcpp"
 local mpdicon = wibox.widget.imagebox(theme.widget_music)
@@ -155,7 +134,6 @@ theme.mpd = lain.widget.mpd({
             title  = mpd_now.title  .. " "
             mpdicon:set_image(theme.widget_music_on)
         elseif mpd_now.state == "pause" then
-            artist = " mpd "
             title  = "paused "
         else
             artist = ""
@@ -257,9 +235,9 @@ local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
         widget:set_markup(markup.font(theme.font,
-                          markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
+                          markup("#7AC82E", " " .. string.format("%02.1f", net_now.received))
                           .. " " ..
-                          markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
+                          markup("#46A8C3", " " .. string.format("%02.1f", net_now.sent) .. " ")))
     end
 })
 

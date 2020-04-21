@@ -24,7 +24,7 @@ local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
 -- }}}
 
-beautiful.xresources.set_dpi(300)
+--beautiful.xresources.set_dpi(200)
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -92,7 +92,7 @@ local themes = {
 local chosen_theme = themes[11]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "urxvtc"
+local terminal     = "gnome-terminal"
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "vim"
@@ -253,6 +253,13 @@ root.buttons(my_table.join(
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
+-- }}}
+-- {{{ Spotify
+function sendToSpotify(command)
+  return function ()
+    awful.util.spawn_with_shell("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player." .. command)
+  end
+end
 -- }}}
 
 -- {{{ Key bindings
@@ -594,7 +601,29 @@ clientkeys = my_table.join(
             c.maximized = not c.maximized
             c:raise()
         end ,
-        {description = "maximize", group = "client"})
+        {description = "maximize", group = "client"}),
+
+
+    -- Added by Ankur
+    -- {{{ Spotify
+    awful.key({ }, "XF86AudioPlay", sendToSpotify("PlayPause")),
+    awful.key({ }, "XF86AudioNext", sendToSpotify("Next")),
+    awful.key({ }, "XF86AudioPrev", sendToSpotify("Previous")),
+    -- }}}
+    awful.key({}, "XF86AudioRaiseVolume",
+        function(c)
+            awful.util.spawn("amixer set Master 1%+")
+            --chosen_theme.volume.update()
+        end
+    ),
+    awful.key({}, "XF86AudioLowerVolume",
+        function(c)
+            awful.util.spawn("amixer set Master 1%-")
+            --chosen_theme.volume.update()
+        end
+    )
+
+
 )
 
 -- Bind all key numbers to tags.
