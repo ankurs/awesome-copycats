@@ -171,7 +171,7 @@ theme.mpd = lain.widget.mpd({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. mem_now.used .. "MB "))
+        widget:set_markup(markup.font(theme.font, " " .. string.format("%.2f", mem_now.used/1024) .. "GB "))
     end
 })
 
@@ -317,9 +317,9 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             spr,
-            arrl_ld,
-            wibox.container.background(mpdicon, theme.bg_focus),
-            wibox.container.background(theme.mpd.widget, theme.bg_focus),
+            arrl_dl,
+            volicon,
+            theme.volume.widget,
             arrl_dl,
             memicon,
             mem.widget,
@@ -329,8 +329,8 @@ function theme.at_screen_connect(s)
             arrl_dl,
             tempicon,
             temp.widget,
-            arrl_ld,
-            wibox.container.background(fsicon, theme.bg_focus),
+            --arrl_ld,
+            --wibox.container.background(fsicon, theme.bg_focus),
             --wibox.container.background(theme.fs.widget, theme.bg_focus),
             arrl_dl,
             baticon,

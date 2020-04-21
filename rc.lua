@@ -24,7 +24,7 @@ local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
 -- }}}
 
-beautiful.xresources.set_dpi(250)
+beautiful.xresources.set_dpi(300)
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -59,7 +59,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+run_once({ "urxvtd", "unclutter -root", "variety" }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -106,14 +106,14 @@ awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
+    --awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
+    awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
     --awful.layout.suit.max,
-    --awful.layout.suit.max.fullscreen,
+    awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
     --awful.layout.suit.corner.nw,
     --awful.layout.suit.corner.ne,
@@ -121,7 +121,7 @@ awful.layout.layouts = {
     --awful.layout.suit.corner.se,
     --lain.layout.cascade,
     --lain.layout.cascade.tile,
-    --lain.layout.centerwork,
+    lain.layout.centerwork,
     --lain.layout.centerwork.horizontal,
     --lain.layout.termfair,
     --lain.layout.termfair.center,
@@ -277,11 +277,12 @@ globalkeys = my_table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
-    -- Non-empty tag browsing
+    --[[ Non-empty tag browsing
     awful.key({ altkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
               {description = "view  previous nonempty", group = "tag"}),
     awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
               {description = "view  previous nonempty", group = "tag"}),
+    ]]--
 
     -- Default client focus
     awful.key({ altkey,           }, "j",
