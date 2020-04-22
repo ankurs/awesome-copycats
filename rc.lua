@@ -106,8 +106,8 @@ awful.layout.layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    --awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+    awful.layout.suit.tile.bottom,
+    --awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     awful.layout.suit.spiral,
@@ -344,7 +344,7 @@ globalkeys = my_table.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey,           }, "Tab",
+    awful.key({ modkey, "Shift"   }, "Tab",
         function ()
             if cycle_prev then
                 awful.client.focus.history.previous()
@@ -356,7 +356,7 @@ globalkeys = my_table.join(
             end
         end,
         {description = "cycle with previous/go back", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "Tab",
+    awful.key({ modkey,    }, "Tab",
         function ()
             if cycle_prev then
                 awful.client.focus.byidx(1)
@@ -613,16 +613,21 @@ clientkeys = my_table.join(
     awful.key({}, "XF86AudioRaiseVolume",
         function(c)
             awful.util.spawn("amixer set Master 1%+")
-            --chosen_theme.volume.update()
+            beautiful.volume.update()
         end
     ),
     awful.key({}, "XF86AudioLowerVolume",
         function(c)
             awful.util.spawn("amixer set Master 1%-")
-            --chosen_theme.volume.update()
+            beautiful.volume.update()
+        end
+    ),
+    awful.key({}, "XF86AudioMute",
+        function(c)
+            awful.util.spawn("amixer set Master toggle")
+            beautiful.volume.update()
         end
     )
-
 
 )
 

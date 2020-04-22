@@ -110,40 +110,61 @@ theme.cal = lain.widget.cal({
     }
 })
 
--- MPD
-local musicplr = awful.util.terminal .. " -title Music -g 130x34-320+16 -e ncmpcpp"
-local mpdicon = wibox.widget.imagebox(theme.widget_music)
-mpdicon:buttons(my_table.join(
-    awful.button({ modkey }, 1, function () awful.spawn.with_shell(musicplr) end),
-    awful.button({ }, 1, function ()
-        os.execute("mpc prev")
-        theme.mpd.update()
-    end),
-    awful.button({ }, 2, function ()
-        os.execute("mpc toggle")
-        theme.mpd.update()
-    end),
-    awful.button({ }, 3, function ()
-        os.execute("mpc next")
-        theme.mpd.update()
-    end)))
-theme.mpd = lain.widget.mpd({
-    settings = function()
-        if mpd_now.state == "play" then
-            artist = " " .. mpd_now.artist .. " "
-            title  = mpd_now.title  .. " "
-            mpdicon:set_image(theme.widget_music_on)
-        elseif mpd_now.state == "pause" then
-            title  = "paused "
-        else
-            artist = ""
-            title  = ""
-            mpdicon:set_image(theme.widget_music)
-        end
+-- https://github.com/streetturtle/awesome-wm-widgets/tree/master/spotify-widget
+local watch = require("awful.widget.watch")
+local GET_SPOTIFY_STATUS_CMD = 'sp status'
+local GET_CURRENT_SONG_CMD = 'sp current-oneline'
 
-        widget:set_markup(markup.font(theme.font, markup("#EA6F81", artist) .. title))
+local spotify_widget = {}
+
+local function spotify_worker(args)
+    local args = args or {}
+
+    local font = args.font or 'Play 9'
+
+    spotify_widget = wibox.widget {
+        {
+            id = 'current_song',
+            widget = wibox.widget.textbox,
+            font = font
+        },
+        layout = wibox.layout.align.horizontal,
+        set_text = function(self, path)
+            self.current_song.markup = path
+        end,
+    }
+
+    local update_widget_text = function(widget, stdout, _, _, _)
+        if string.find(stdout, 'Error: Spotify is not running.') ~= nil then
+            widget:set_text('')
+            widget:set_visible(false)
+        else
+            widget:set_text(stdout)
+            widget:set_visible(true)
+        end
     end
-})
+
+    watch(GET_CURRENT_SONG_CMD, 1, update_widget_text, spotify_widget)
+
+    --- Adds mouse controls to the widget:
+    --  - left click - play/pause
+    --  - scroll up - play next song
+    --  - scroll down - play previous song
+    spotify_widget:connect_signal("button::press", function(_, _, _, button)
+        if (button == 1) then
+            awful.spawn("sp play", false)      -- left click
+        elseif (button == 4) then
+            awful.spawn("sp next", false)  -- scroll up
+        elseif (button == 5) then
+            awful.spawn("sp prev", false)  -- scroll down
+        end
+        awful.spawn.easy_async(GET_SPOTIFY_STATUS_CMD, function(stdout, stderr, exitreason, exitcode)
+            update_widget_icon(spotify_widget, stdout, stderr, exitreason, exitcode)
+        end)
+    end)
+
+    return spotify_widget
+end
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
@@ -307,7 +328,8 @@ function theme.at_screen_connect(s)
             arrl_dl,
             tempicon,
             temp.widget,
-            --arrl_ld,
+            arrl_ld,
+            spotify_worker(),
             --wibox.container.background(fsicon, theme.bg_focus),
             --wibox.container.background(theme.fs.widget, theme.bg_focus),
             arrl_dl,
