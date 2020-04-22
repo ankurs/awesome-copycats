@@ -11,18 +11,21 @@ local awful = require("awful")
 local wibox = require("wibox")
 local dpi   = require("beautiful.xresources").apply_dpi
 
+local gtk = require("beautiful.gtk").get_theme_variables()
+
 local os = os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/ankur"
 theme.wallpaper                                 = theme.dir .. "/wallhaven-lq9y8l.png"
-theme.font                                      = "Terminus 9"
-theme.fg_normal                                 = "#DDDDFF"
-theme.fg_focus                                  = "#EA6F81"
+theme.font                                      = gtk.font_family .. " 9"
+theme.fg_normal                                 = gtk.fg_color
+theme.fg_focus                                  = gtk.selected_fg_color
 theme.fg_urgent                                 = "#CC9393"
-theme.bg_normal                                 = "#1A1A1A"
-theme.bg_focus                                  = "#313131"
+theme.bg_normal                                 = gtk.bg_color
+theme.bg_focus                                  = gtk.selected_bg_color
+theme.alt_color                                 = gtk.menubar_bg_color
 theme.bg_urgent                                 = "#1A1A1A"
 theme.border_width                              = dpi(1)
 theme.border_normal                             = "#3F3F3F"
@@ -32,7 +35,7 @@ theme.tasklist_bg_focus                         = "#1A1A1A"
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
-theme.menu_height                               = dpi(16)
+theme.menu_height                               = dpi(26)
 theme.menu_width                                = dpi(140)
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
@@ -103,7 +106,7 @@ local clock = awful.widget.watch(
 theme.cal = lain.widget.cal({
         attach_to = { clock },
         notification_preset = {
-            font = "Terminus 10",
+            font = "Sans 10",
             fg   = theme.fg_normal,
             bg   = theme.bg_normal
         }
@@ -137,7 +140,7 @@ local function spotify_worker(args)
             widget:set_text('')
             widget:set_visible(false)
         else
-            widget:set_text(stdout)
+            widget:set_text(" "..stdout.." ")
             widget:set_visible(true)
         end
     end
@@ -248,8 +251,8 @@ local net = lain.widget.net({
 
 -- Separators
 local spr     = wibox.widget.textbox(' ')
-local arrl_dl = separators.arrow_left(theme.bg_focus, "alpha")
-local arrl_ld = separators.arrow_left("alpha", theme.bg_focus)
+local arrl_dl = separators.arrow_left(theme.alt_color, "alpha")
+local arrl_ld = separators.arrow_left("alpha", theme.alt_color)
 
 function theme.at_screen_connect(s)
     -- Quake application
@@ -299,30 +302,30 @@ function theme.at_screen_connect(s)
             { -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
                 wibox.widget.systray(),
+                spr,
+                spotify_worker(),
                 arrl_ld,
-                wibox.container.background(spotify_worker(), theme.bg_focus),
+                wibox.container.background(neticon, theme.alt_color),
+                wibox.container.background(net.widget, theme.alt_color),
                 arrl_dl,
-                neticon,
-                net.widget,
+                tempicon,
+                temp.widget,
                 arrl_ld,
-                wibox.container.background(tempicon, theme.bg_focus),
-                wibox.container.background(temp.widget, theme.bg_focus),
+                wibox.container.background(memicon, theme.alt_color),
+                wibox.container.background(mem.widget, theme.alt_color),
                 arrl_dl,
-                memicon,
-                mem.widget,
+                cpuicon,
+                cpu.widget,
                 arrl_ld,
-                wibox.container.background(cpuicon, theme.bg_focus),
-                wibox.container.background(cpu.widget, theme.bg_focus),
+                wibox.container.background(volicon, theme.alt_color),
+                wibox.container.background(theme.volume.widget, theme.alt_color),
                 arrl_dl,
-                volicon,
-                theme.volume.widget,
+                baticon,
+                bat.widget,
                 arrl_ld,
-                wibox.container.background(baticon, theme.bg_focus),
-                wibox.container.background(bat.widget, theme.bg_focus),
+                wibox.container.background(clock,theme.alt_color),
                 arrl_dl,
-                clock,
-                arrl_ld,
-                wibox.container.background(s.mylayoutbox, theme.bg_focus),
+                s.mylayoutbox,
             },
         }
     end
