@@ -199,17 +199,21 @@ local myawesomemenu = {
     { "restart", awesome.restart },
     { "quit", function() awesome.quit() end }
 }
+local mymenu = {
+    { "vimwiki", terminal .. " -e 'nvim +VimwikiIndex'"},
+}
 awful.util.mymainmenu = freedesktop.menu.build({
     icon_size = beautiful.menu_height or dpi(16),
     before = {
+        { "Me", mymenu },
         { "Awesome", myawesomemenu, beautiful.awesome_icon },
-        -- other triads can be put here
     },
     after = {
         { "Open terminal", terminal },
         -- other triads can be put here
     }
 })
+
 -- hide menu when mouse leaves it
 --awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function() awful.util.mymainmenu:hide() end)
 
