@@ -530,8 +530,8 @@ globalkeys = my_table.join(
     -- User programs
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
               {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
-              {description = "run gui editor", group = "launcher"}),
+    -- awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
+    --          {description = "run gui editor", group = "launcher"}),
 
     -- Default
     --[[ Menubar
@@ -549,7 +549,7 @@ globalkeys = my_table.join(
     -- check https://github.com/DaveDavenport/rofi for more details
     awful.key({ modkey }, "space", function ()
             os.execute(string.format("rofi -show %s -theme %s",
-            'run', rofi_theme))
+            'combi', rofi_theme))
         end,
         {description = "show rofi", group = "launcher"}),
     awful.key({ modkey }, "`", function ()
