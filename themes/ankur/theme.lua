@@ -92,26 +92,24 @@ local markup = lain.util.markup
 local separators = lain.util.separators
 
 -- Textclock
-local clockicon = wibox.widget.imagebox(theme.widget_clock)
 local clock = awful.widget.watch(
     "date +'%a %d %b %R'", 60,
     function(widget, stdout)
         widget:set_markup(" " .. markup.font(theme.font, stdout))
     end
-)
+    )
 
 -- Calendar
 theme.cal = lain.widget.cal({
-    attach_to = { clock },
-    notification_preset = {
-        font = "Terminus 10",
-        fg   = theme.fg_normal,
-        bg   = theme.bg_normal
-    }
-})
+        attach_to = { clock },
+        notification_preset = {
+            font = "Terminus 10",
+            fg   = theme.fg_normal,
+            bg   = theme.bg_normal
+        }
+    })
 
 -- https://github.com/streetturtle/awesome-wm-widgets/tree/master/spotify-widget
-local watch = require("awful.widget.watch")
 local GET_SPOTIFY_STATUS_CMD = 'sp status'
 local GET_CURRENT_SONG_CMD = 'sp current-oneline'
 
@@ -144,7 +142,7 @@ local function spotify_worker(args)
         end
     end
 
-    watch(GET_CURRENT_SONG_CMD, 1, update_widget_text, spotify_widget)
+    awful.widget.watch(GET_CURRENT_SONG_CMD, 1, update_widget_text, spotify_widget)
 
     --- Adds mouse controls to the widget:
     --  - left click - play/pause
@@ -158,9 +156,6 @@ local function spotify_worker(args)
         elseif (button == 5) then
             awful.spawn("sp prev", false)  -- scroll down
         end
-        awful.spawn.easy_async(GET_SPOTIFY_STATUS_CMD, function(stdout, stderr, exitreason, exitcode)
-            update_widget_icon(spotify_widget, stdout, stderr, exitreason, exitcode)
-        end)
     end)
 
     return spotify_widget
@@ -169,98 +164,87 @@ end
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local mem = lain.widget.mem({
-    settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. string.format("%.2f", mem_now.used/1024) .. "GB "))
-    end
-})
+        settings = function()
+            widget:set_markup(markup.font(theme.font, " " .. string.format("%.2f", mem_now.used/1024) .. "GB "))
+        end
+    })
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
-    settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
-    end
-})
+        settings = function()
+            widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
+        end
+    })
 
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
-    settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
-    end
-})
-
--- / fs
-local fsicon = wibox.widget.imagebox(theme.widget_hdd)
---[[ commented because it needs Gio/Glib >= 2.54
-theme.fs = lain.widget.fs({
-    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "Terminus 10" },
-    settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. fs_now["/"].percentage .. "% "))
-    end
-})
---]]
+        settings = function()
+            widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
+        end
+    })
 
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_battery)
 local bat = lain.widget.bat({
-    settings = function()
-        if bat_now.status and bat_now.status ~= "N/A" then
-            if bat_now.ac_status == 1 then
-                baticon:set_image(theme.widget_ac)
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-                baticon:set_image(theme.widget_battery_empty)
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-                baticon:set_image(theme.widget_battery_low)
+        settings = function()
+            if bat_now.status and bat_now.status ~= "N/A" then
+                if bat_now.ac_status == 1 then
+                    baticon:set_image(theme.widget_ac)
+                elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+                    baticon:set_image(theme.widget_battery_empty)
+                elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+                    baticon:set_image(theme.widget_battery_low)
+                else
+                    baticon:set_image(theme.widget_battery)
+                end
+                widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
             else
-                baticon:set_image(theme.widget_battery)
+                widget:set_markup(markup.font(theme.font, " AC "))
+                baticon:set_image(theme.widget_ac)
             end
-            widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
-        else
-            widget:set_markup(markup.font(theme.font, " AC "))
-            baticon:set_image(theme.widget_ac)
         end
-    end
-})
+    })
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
 theme.volume = lain.widget.alsa({
-    settings = function()
-        if volume_now.status == "off" then
-            volicon:set_image(theme.widget_vol_mute)
-        elseif tonumber(volume_now.level) == 0 then
-            volicon:set_image(theme.widget_vol_no)
-        elseif tonumber(volume_now.level) <= 50 then
-            volicon:set_image(theme.widget_vol_low)
-        else
-            volicon:set_image(theme.widget_vol)
-        end
+        settings = function()
+            if volume_now.status == "off" then
+                volicon:set_image(theme.widget_vol_mute)
+            elseif tonumber(volume_now.level) == 0 then
+                volicon:set_image(theme.widget_vol_no)
+            elseif tonumber(volume_now.level) <= 50 then
+                volicon:set_image(theme.widget_vol_low)
+            else
+                volicon:set_image(theme.widget_vol)
+            end
 
-        widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
-    end
-})
+            widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
+        end
+    })
 theme.volume.widget:buttons(awful.util.table.join(
-                               awful.button({}, 4, function ()
-                                     awful.util.spawn("amixer set Master 1%+")
-                                     theme.volume.update()
-                               end),
-                               awful.button({}, 5, function ()
-                                     awful.util.spawn("amixer set Master 1%-")
-                                     theme.volume.update()
-                               end)
-))
+        awful.button({}, 4, function ()
+            awful.util.spawn("amixer set Master 1%+")
+            theme.volume.update()
+        end),
+        awful.button({}, 5, function ()
+            awful.util.spawn("amixer set Master 1%-")
+            theme.volume.update()
+        end)
+    ))
 
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
-    settings = function()
-        widget:set_markup(markup.font(theme.font,
-                          markup("#7AC82E", " " .. string.format("%02.1f", net_now.received))
-                          .. " " ..
-                          markup("#46A8C3", " " .. string.format("%02.1f", net_now.sent) .. " ")))
-    end
-})
+        settings = function()
+            widget:set_markup(markup.font(theme.font,
+                    markup("#7AC82E", " " .. string.format("%02.1f", net_now.received))
+                    .. " " ..
+                markup("#46A8C3", " " .. string.format("%02.1f", net_now.sent) .. " ")))
+        end
+    })
 
 -- Separators
 local spr     = wibox.widget.textbox(' ')
@@ -287,64 +271,53 @@ function theme.at_screen_connect(s)
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
     s.mylayoutbox:buttons(my_table.join(
-                           awful.button({}, 1, function () awful.layout.inc( 1) end),
-                           awful.button({}, 2, function () awful.layout.set( awful.layout.layouts[1] ) end),
-                           awful.button({}, 3, function () awful.layout.inc(-1) end),
-                           awful.button({}, 4, function () awful.layout.inc( 1) end),
-                           awful.button({}, 5, function () awful.layout.inc(-1) end)))
-    -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+            awful.button({}, 1, function () awful.layout.inc( 1) end),
+            awful.button({}, 2, function () awful.layout.set( awful.layout.layouts[1] ) end),
+            awful.button({}, 3, function () awful.layout.inc(-1) end),
+            awful.button({}, 4, function () awful.layout.inc( 1) end),
+        awful.button({}, 5, function () awful.layout.inc(-1) end)))
+        -- Create a taglist widget
+        s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
 
-    -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
+        -- Create a tasklist widget
+        s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(18), bg = theme.bg_normal, fg = theme.fg_normal })
+        -- Create the wibox
+        s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(18), bg = theme.bg_normal, fg = theme.fg_normal })
 
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            --spr,
-            s.mytaglist,
-            s.mypromptbox,
-            spr,
-        },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
-            spr,
-            arrl_dl,
-            volicon,
-            theme.volume.widget,
-            arrl_dl,
-            memicon,
-            mem.widget,
-            arrl_ld,
-            wibox.container.background(cpuicon, theme.bg_focus),
-            wibox.container.background(cpu.widget, theme.bg_focus),
-            arrl_dl,
-            tempicon,
-            temp.widget,
-            arrl_ld,
-            spotify_worker(),
-            --wibox.container.background(fsicon, theme.bg_focus),
-            --wibox.container.background(theme.fs.widget, theme.bg_focus),
-            arrl_dl,
-            baticon,
-            bat.widget,
-            arrl_ld,
-            wibox.container.background(neticon, theme.bg_focus),
-            wibox.container.background(net.widget, theme.bg_focus),
-            arrl_dl,
-            clock,
-            spr,
-            arrl_ld,
-            wibox.container.background(s.mylayoutbox, theme.bg_focus),
-        },
-    }
-end
+        -- Add widgets to the wibox
+        s.mywibox:setup {
+            layout = wibox.layout.align.horizontal,
+            { -- Left widgets
+                layout = wibox.layout.fixed.horizontal,
+                --spr,
+                s.mytaglist,
+                s.mypromptbox,
+                spr,
+            },
+            s.mytasklist, -- Middle widget
+            { -- Right widgets
+                layout = wibox.layout.fixed.horizontal,
+                wibox.widget.systray(),
+                spr,
+                spotify_worker(),
+                neticon,
+                net.widget,
+                tempicon,
+                temp.widget,
+                memicon,
+                mem.widget,
+                cpuicon,
+                cpu.widget,
+                baticon,
+                bat.widget,
+                clock,
+                volicon,
+                theme.volume.widget,
+                arrl_ld,
+                wibox.container.background(s.mylayoutbox, theme.bg_focus),
+            },
+        }
+    end
 
-return theme
+    return theme
