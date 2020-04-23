@@ -201,7 +201,9 @@ local myawesomemenu = {
     { "quit", function() awesome.quit() end }
 }
 local mymenu = {
-    { "vimwiki", terminal .. " -e 'nvim +VimwikiIndex'"},
+    { "vimwiki", terminal .. " -e 'nvim +VimwikiIndex'" },
+    { "Next Wallpaper", "variety -n" },
+    { "Previous Wallpaper", "variety -p" },
 }
 awful.util.mymainmenu = freedesktop.menu.build({
     icon_size = beautiful.menu_height or dpi(16),
