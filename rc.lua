@@ -207,6 +207,7 @@ local myawesomemenu = {
 }
 local mymenu = {
     { "vimwiki", terminal .. " -e 'nvim +VimwikiIndex'" },
+    { "Audio", "pavucontrol" },
     { "Next Wallpaper", "variety -n" },
     { "Previous Wallpaper", "variety -p" },
 }
