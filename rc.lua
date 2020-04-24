@@ -57,7 +57,12 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root", "variety -n" }) -- entries must be separated by commas
+run_once({
+    "urxvtd",
+    "unclutter -root",
+    "variety -n",
+    "xautolock -time 5 -locker 'xlock -mode space'",
+}) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -96,7 +101,7 @@ local cycle_prev   = true -- cycle trough all previous client or just the first 
 local editor       = os.getenv("EDITOR") or "nvim"
 local gui_editor   = os.getenv("GUI_EDITOR") or "gvim"
 local browser      = os.getenv("BROWSER") or "brave-browser"
-local scrlocker    = "slock"
+local scrlocker    = "xautolock -locknow"
 local rofi_theme = "gruvbox-dark"
 
 awful.util.terminal = terminal
@@ -450,10 +455,10 @@ globalkeys = my_table.join(
               {description = "show weather", group = "widgets"}),
 
     -- Brightness
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
-              {description = "+10%", group = "hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end,
-              {description = "-10%", group = "hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("light -A 5") end,
+              {description = "+5%", group = "hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("light -U 5") end,
+              {description = "-5%", group = "hotkeys"}),
 
     -- ALSA volume control
     awful.key({ altkey }, "Up",
