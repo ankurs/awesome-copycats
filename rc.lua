@@ -60,6 +60,8 @@ end
 run_once({
     "urxvtd",
     "unclutter -root",
+    "nm-applet",
+    "blueman-applet",
     "variety -n",
     "xautolock -time 5 -locker 'xlock -mode space'",
 }) -- entries must be separated by commas
@@ -105,7 +107,7 @@ local scrlocker    = "xautolock -locknow"
 local rofi_theme = "gruvbox-dark"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "1", "2", "3", "work", "play"}
 awful.layout.layouts = {
     awful.layout.suit.spiral,
     awful.layout.suit.floating,
@@ -751,6 +753,16 @@ awful.rules.rules = {
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
+
+    { rule = { class = "Slack" },
+      properties = { screen = 1, tag = awful.util.tagnames[4] } },
+
+    { rule = { class = "[Ss]potify" },
+      properties = { screen = 1, tag = awful.util.tagnames[5] } },
+
+    { rule = { class = "vlc" },
+      properties = { screen = 1, tag = awful.util.tagnames[5] } },
+
 }
 -- }}}
 
