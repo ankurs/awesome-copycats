@@ -767,6 +767,9 @@ awful.rules.rules = {
     { rule = { class = "vlc" },
       properties = { screen = 1, tag = awful.util.tagnames[5] } },
 
+    { rule = { class = "calculator" },
+      properties = { floating = true } },
+
 }
 -- }}}
 
