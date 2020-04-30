@@ -452,10 +452,12 @@ globalkeys = my_table.join(
     -- Widgets popups
     awful.key({ altkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
               {description = "show calendar", group = "widgets"}),
+    --[[
     awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
               {description = "show filesystem", group = "widgets"}),
     awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
               {description = "show weather", group = "widgets"}),
+    ]]--
 
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("light -A 5") end,
@@ -496,6 +498,7 @@ globalkeys = my_table.join(
         {description = "volume 0%", group = "hotkeys"}),
 
     -- MPD control
+    --[[
     awful.key({ altkey, "Control" }, "Up",
         function ()
             os.execute("mpc toggle")
@@ -533,6 +536,7 @@ globalkeys = my_table.join(
             naughty.notify(common)
         end,
         {description = "mpc on/off", group = "widgets"}),
+    ]]--
 
     -- Copy primary to clipboard (terminals to gtk)
     awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
@@ -568,7 +572,7 @@ globalkeys = my_table.join(
         {description = "show rofi", group = "launcher"}),
     awful.key({ modkey }, "`", function ()
             os.execute(string.format("rofi -show %s -theme %s",
-            'window', rofi_theme))
+            'combi', rofi_theme))
         end,
         {description = "select open windows", group = "launcher"}),
 

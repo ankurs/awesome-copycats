@@ -121,7 +121,7 @@ local spotify_widget = {}
 local function spotify_worker(args)
     local args = args or {}
 
-    local font = args.font or 'Play 9'
+    local font = args.font or 'Sans 9'
 
     spotify_widget = wibox.widget {
         {
