@@ -19,14 +19,15 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/ankur"
 theme.wallpaper                                 = theme.dir .. "/wallhaven-1j26rg.jpg"
-theme.font                                      = gtk.font_family .. " 9"
+
+theme.font                                      = gtk.font_family .. " " .. gtk.font_size
 theme.fg_normal                                 = gtk.fg_color
 theme.fg_focus                                  = gtk.selected_fg_color
-theme.fg_urgent                                 = "#CC9393"
+theme.fg_urgent                                 = gtk.error_fg_color
 theme.bg_normal                                 = gtk.bg_color
 theme.bg_focus                                  = gtk.selected_bg_color
 theme.alt_color                                 = gtk.menubar_bg_color
-theme.bg_urgent                                 = "#1A1A1A"
+theme.bg_urgent                                 = gtk.error_bg_color
 theme.border_width                              = dpi(0)
 theme.border_normal                             = "#3F3F3F"
 theme.border_focus                              = "#7F7F7F"
@@ -35,6 +36,7 @@ theme.tasklist_bg_focus                         = "#1A1A1A"
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
+
 theme.menu_height                               = dpi(26)
 theme.menu_width                                = dpi(140)
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
