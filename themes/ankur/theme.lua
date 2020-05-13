@@ -18,7 +18,7 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/ankur"
-theme.wallpaper                                 = theme.dir .. "/wallhaven-1j26rg.jpg"
+theme.wallpaper                                 = theme.dir .. "/pas.jpg"
 
 theme.font                                      = gtk.font_family .. " " .. gtk.font_size
 theme.fg_normal                                 = gtk.fg_color
