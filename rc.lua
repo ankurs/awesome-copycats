@@ -58,8 +58,7 @@ local function run_once(cmd_arr)
 end
 
 run_once({
-    "urxvtd",
-    "unclutter -root",
+    "rclone mount drive: ~/GoogleDrive/My\\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty",
     "nm-applet",
     "blueman-applet",
     "variety -n",
