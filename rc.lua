@@ -58,6 +58,7 @@ local function run_once(cmd_arr)
 end
 
 run_once({
+    "/usr/libexec/polkit-gnome-authentication-agent-1",
     "rclone mount drive: ~/GoogleDrive/My\\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty",
     "nm-applet",
     "blueman-applet",
