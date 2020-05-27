@@ -505,8 +505,8 @@ globalkeys = my_table.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
-    awful.key({ modkey }, "q", function () awful.spawn(browser) end,
-              {description = "run browser", group = "launcher"}),
+    -- awful.key({ modkey }, "q", function () awful.spawn(browser) end,
+    --          {description = "run browser", group = "launcher"}),
     -- awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
     --          {description = "run gui editor", group = "launcher"}),
 
@@ -562,6 +562,8 @@ clientkeys = my_table.join(
         end,
         {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
+              {description = "close", group = "client"}),
+    awful.key({ modkey }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
