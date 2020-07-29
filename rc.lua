@@ -62,9 +62,9 @@ run_once({
     "rclone mount drive: ~/GoogleDrive/My\\ Drive --daemon --fast-list --drive-use-trash=true --allow-non-empty",
     "nm-applet",
     "blueman-applet",
-    "variety -n", -- change wallpaper
+    "/usr/bin/python3 /usr/bin/variety --profile /home/ankur/.config/variety/", -- change wallpaper
     "xautolock -time 5 -locker 'xlock -mode space'",
-    -- "xrandr --output eDP-1 --scale 1x1 --mode 1680x1050" -- for laptop when things break
+    --"xrandr --output eDP-1 --scale 1x1 --mode 1680x1050" -- for laptop when things break
 }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
@@ -111,6 +111,7 @@ awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "work", "play"}
 awful.layout.layouts = {
     awful.layout.suit.spiral,
+    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
@@ -131,7 +132,6 @@ awful.layout.layouts = {
     --lain.layout.centerwork.horizontal,
     --lain.layout.termfair,
     --lain.layout.termfair.center,
-    awful.layout.suit.floating,
 }
 
 awful.util.taglist_buttons = my_table.join(
